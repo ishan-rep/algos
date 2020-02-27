@@ -1,1 +1,2 @@
 # algos
+Learning haskell!
