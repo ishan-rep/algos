@@ -4,7 +4,7 @@ import Data.Maybe
 import Data.List
 import qualified Data.List as L
 import Control.Monad
-
+ 
 data GNode =
     GNode {
         vertex :: Int
@@ -78,13 +78,17 @@ createSolutionListOfStrings wordList graph minDistList [toVertex] = do
 createSolutionListOfStrings wordList graph minDistList (toVertex:restVertex) = do
     let firstSolns = createSolutionListOfStrings wordList graph minDistList [toVertex]
     firstSolns ++ createSolutionListOfStrings wordList graph minDistList restVertex
+createSolutionListOfStrings _ _ _ _ = []
 
 main :: IO ()
 main = do
+    start <- getLine
+    end <- getLine
     noOfWordsString <- getLine 
     let noOfWords = read noOfWordsString :: Int
     -- let wordList = ["hit","hot","dot","dog","lot","log","cog"]
-    wordList <- replicateM noOfWords getLine
+    wordList' <- replicateM noOfWords getLine
+    let wordList = start : wordList' ++ [end]
     -- wordList <- read
     let graph = map (makeGraphNode wordList) wordList
         len = L.length graph
@@ -92,4 +96,5 @@ main = do
         visited = []
         (visited', minDistList) = minimumDistancePath [head graph] graph visited minPathListInit
         sols = createSolutionListOfStrings wordList graph minDistList [vertex (last graph)]
+    print minDistList
     print sols
